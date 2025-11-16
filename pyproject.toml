@@ -35,7 +35,6 @@ python_files = ["test_*.py", "*_test.py"]
 
 [tool.coverage.run]
 branch = true
-source = ["src"]
 omit = ["tests/*"]
 
 [build-system]
