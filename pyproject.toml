@@ -35,8 +35,8 @@ python_files = ["test_*.py", "*_test.py"]
 
 [tool.coverage.run]
 branch = true
-source = ["src"]
-omit = ["tests/*"]
+source = ["."]
+omit = ["tests/*", ".*", "*/site-packages/*"]
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
