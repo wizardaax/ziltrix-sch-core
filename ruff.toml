@@ -1,0 +1,10 @@
+target-version = "py310"
+line-length = 100
+
+[lint]
+select = ["E","F","W","I","B","C4","PIE","PL","UP","RUF"]
+ignore = ["E203","E501"]
+fixable = ["ALL"]
+
+[format]
+docstring-code-format = true
