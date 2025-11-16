@@ -10,6 +10,9 @@ concurrency:
   group: ci-python-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   python-lint-test:
     name: Python ${{ matrix.python-version }} - Lint, Type, Test
