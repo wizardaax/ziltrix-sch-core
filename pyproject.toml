@@ -1,0 +1,41 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "B", "UP"]
+ignore = [
+  "E501",
+]
+src = ["src", "."]
+exclude = [
+  ".git",
+  ".github",
+  ".venv",
+  "venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+src_paths = ["src", "."]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = ["tests/*"]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
