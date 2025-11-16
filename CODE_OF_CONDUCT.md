@@ -6,4 +6,4 @@ For attribution:
 - Version 2.1 — https://www.contributor-covenant.org/version/2/1/code_of_conduct/
 - Enforcement Guidelines — https://www.contributor-covenant.org/version/2/1/code_of_conduct/#enforcement-guidelines
 
-To report violations, contact: conduct@ziltrix.ai (replace with your contact).
+To report violations, contact: adzextreem@gmail.com.

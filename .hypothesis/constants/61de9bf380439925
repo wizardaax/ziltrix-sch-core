@@ -1,0 +1,4 @@
+# file: /home/runner/work/ziltrix-sch-core/ziltrix-sch-core/src/ziltrix_sch_core/__init__.py
+# hypothesis_version: 6.148.1
+
+['0.0.1', 'binet', 'deterministic_kdf', 'entropy_bytes', 'entropy_int', 'fib', 'lucas', 'phi', 'to_balanced_ternary']
