@@ -1,0 +1,5 @@
+target-version = "py310"
+line-length = 100
+select = ["E","F","W","I","B","C4","PIE","PL","UP","RUF"]
+ignore = ["E203","E501"]
+fix = true
