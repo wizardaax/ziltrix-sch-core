@@ -13,6 +13,7 @@ venv/
 .mypy_cache/
 .coverage
 htmlcov/
+.hypothesis/
 
 # Jupyter
 .ipynb_checkpoints/
