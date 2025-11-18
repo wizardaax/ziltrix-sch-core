@@ -2,6 +2,72 @@
 
 This repository contains the Ziltrix SCH (Sentinel Cognitive Hybridiser) core engine for symbolic-cognitive computation. Follow these instructions to maintain code quality and consistency.
 
+## CRITICAL: Agent Operational Rules
+
+### 1. GENERAL RULES
+- Do NOT modify the entire repository without explicit user instruction.
+- Do NOT run cleanup operations on the whole repo.
+- Do NOT attempt to remove or "clean duplicates" unless explicitly requested.
+- Do NOT delete or modify binary files (PDF, PNG, JPG, ZIP, EXE).
+- Do NOT generate or modify CI workflows automatically.
+- Do NOT start repeated task loops or retry jobs.
+
+### 2. FILE & DIRECTORY RULES
+- All PDF files must remain stored in `/docs/pdfs/` unless the user instructs otherwise.
+- Never move, rename, or delete any PDF without explicit user confirmation.
+- Never create extra folders for PDFs.
+- Never scan or diff PDFs unless requested.
+
+### 3. PULL REQUEST POLICY
+- PRs must contain real, meaningful changes.
+- If no changes are required, do NOT create a PR.
+- Do NOT claim the repository is "clean" unless files were actually modified.
+- Do NOT reopen closed PRs.
+- Do NOT run the same task multiple times.
+
+### 4. ALLOWED ACTIONS
+- Format Python files with ruff/black when instructed.
+- Run pytest only when explicitly asked.
+- Fix or modify a single file or specific directory when asked.
+- Suggest improvements without executing them automatically.
+- Create PRs ONLY for tasks explicitly requested by the user.
+- Only operate on one task at a time.
+
+### 5. FORBIDDEN ACTIONS
+- Do NOT run repo-wide cleanups.
+- Do NOT delete or modify files autonomously.
+- Do NOT re-run tasks automatically after finishing.
+- Do NOT modify `.github/workflows/` unless explicitly requested.
+- Do NOT open more than one PR per task.
+- Do NOT trigger MCP server loops.
+
+### 6. TASK EXECUTION POLICY
+1. Validate user instruction.
+2. Ensure the task is scoped to a specific file or directory.
+3. Ask for confirmation if the scope is unclear.
+4. Apply changes ONLY to the requested path.
+5. Generate one clean PR containing only those changes.
+6. Stop immediately after completing the task.
+7. Do NOT retry.
+
+### 7. FORCE STOP CONDITION
+If a task results in:
+- no diffs  
+- no modified files  
+- empty PR  
+
+Then:
+- exit immediately  
+- do NOT create a PR  
+- do NOT say "clean"  
+- do NOT re-run  
+
+### 8. SAFETY GUARD
+If more than one Copilot-created PR exists:
+- halt all running tasks
+- close the newest PR
+- notify the user for manual review
+
 ## General Guidelines
 
 ### Python Version and Style
