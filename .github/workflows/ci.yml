@@ -29,8 +29,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ruff black mypy pytest bandit
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
 
       - name: Pre-commit (if configured)
         if: ${{ hashFiles('.pre-commit-config.yaml') != '' || hashFiles('.pre-commit-config.yml') != '' }}
@@ -70,13 +68,8 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Lint (eslint if present)
-        run: |
-          if [ -f .eslintrc ] || [ -f .eslintrc.js ] || [ -f .eslintrc.cjs ] || [ -f .eslintrc.json ] || [ -f package.json ]; then
-            npx --yes eslint . || (echo "eslint failed"; exit 1)
-          else
-            echo "No eslint config found; skipping."
-          fi
+      - name: Lint
+        run: npm run lint --if-present
 
       - name: Test (if present)
         run: npm test --if-present
