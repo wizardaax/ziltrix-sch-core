@@ -1,6 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from scipy.special import zeta
+import numpy as np
 from scipy.constants import golden
 
 # === Constants ===
@@ -35,26 +34,26 @@ def visualize_riemann_spiral(num_points=500):
     plt.figure(figsize=(12, 12), facecolor='black')
     ax = plt.subplot(111, projection='polar')
     ax.set_facecolor('black')
-    
+
     # Plot the spiral points
     # Color them based on a cyclic function to show the "flow"
     colors = plt.cm.viridis(np.linspace(0, 1, num_points))
     ax.scatter(theta_values, r_values, c=colors, s=10, alpha=0.6, label='Golden Spiral Nodes')
 
     # Highlight Zeta Zero resonant points (conceptual mapping)
-    # The document suggests a mapping n <-> gamma_n. 
-    # We'll mark the first few points corresponding to the integer indices of the zeros 
+    # The document suggests a mapping n <-> gamma_n.
+    # We'll mark the first few points corresponding to the integer indices of the zeros
     # (or just the first N points to show the concept, as direct mapping n=gamma is not 1:1 integers usually)
     # For visualization, let's highlight points where n is close to a zeta zero value (if we treat n as continuous)
     # or just the first 10 points to represent the "embedded" zeros.
-    
+
     # Let's highlight specific indices that might "resonate" (just first 10 for now as placeholders for the theory)
     resonant_indices = np.array([int(z) for z in ZETA_ZEROS]) # Simple integer casting for visualization
     res_r, res_theta = get_spiral_coords(resonant_indices)
     ax.scatter(res_theta, res_r, c='red', s=50, marker='x', label='Zeta Zero Resonances (Approx)')
 
     # Connect points to show the spiral arm structure
-    # Since it's a discrete spiral, connecting sequential n can be messy, 
+    # Since it's a discrete spiral, connecting sequential n can be messy,
     # but let's try to show the "arms" by connecting points with similar phases if possible.
     # For now, just the scatter is cleaner.
 
@@ -62,9 +61,9 @@ def visualize_riemann_spiral(num_points=500):
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
     ax.grid(color='gray', alpha=0.3)
-    
+
     plt.legend(loc='upper right')
-    
+
     output_file = 'riemann_spiral_visualization.png'
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"[OK] Visualization saved to {output_file}")
