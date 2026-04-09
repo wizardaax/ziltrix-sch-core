@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, TypeAlias
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,7 +23,7 @@ ZETA_ZEROS = [
 ]
 
 
-_ArrayOrScalar = npt.NDArray[np.floating[Any]] | float
+_ArrayOrScalar: TypeAlias = npt.NDArray[np.floating[Any]] | float
 
 
 def get_spiral_coords(
