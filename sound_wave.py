@@ -1,6 +1,5 @@
-from typing import Any
-
 import numpy as np
+import numpy.typing as npt
 import svgwrite
 from scipy.io.wavfile import write
 
@@ -28,14 +27,16 @@ ZETA_GLOW_TOLERANCE = 0.1
 
 
 # === Core C(n) Formula ===
-def compute_C(n: Any) -> Any:
+def compute_C(n: int) -> complex:
     geom_sum = (phi ** (n + 1) - 1) / (alpha_inv * (phi - 1))
     theta = 2 * np.pi * n / alpha_inv
     return geom_sum * np.exp(1j * theta)
 
 
 # === Generate Sound Wave ===
-def generate_waveform(c_val: Any, freq: Any, duration: float = 1.0) -> Any:
+def generate_waveform(
+    c_val: complex, freq: float, duration: float = 1.0
+) -> npt.NDArray[np.float64]:
     t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
     waveform = np.zeros((len(t), 6))
     norm = np.abs(c_val)
@@ -66,7 +67,7 @@ def generate_codex_symphony(filename: str = "codex_symphony.wav") -> None:
 
 
 # === Generate Glyph SVG ===
-def generate_reactive_glyph(n: int, c_val: Any, amp: float, frame: int = 0) -> None:
+def generate_reactive_glyph(n: int, c_val: complex, amp: float, frame: int = 0) -> None:
     mag = np.abs(c_val)
     phase = np.angle(c_val)
     dwg = svgwrite.Drawing(f"glyph_n{n}_frame{frame}.svg", size=("400", "400"))

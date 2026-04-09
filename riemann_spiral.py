@@ -2,6 +2,7 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 from scipy.constants import golden
 
 # === Constants ===
@@ -22,7 +23,12 @@ ZETA_ZEROS = [
 ]
 
 
-def get_spiral_coords(n: Any) -> tuple[Any, Any]:
+_ArrayOrScalar = npt.NDArray[np.floating[Any]] | float
+
+
+def get_spiral_coords(
+    n: npt.NDArray[np.integer[Any]] | int,
+) -> tuple[_ArrayOrScalar, _ArrayOrScalar]:
     """
     Calculate polar coordinates based on the document:
     r(n) = 3 * sqrt(n)
@@ -33,7 +39,9 @@ def get_spiral_coords(n: Any) -> tuple[Any, Any]:
     return r, theta
 
 
-def polar_to_cartesian(r: Any, theta: Any) -> tuple[Any, Any]:
+def polar_to_cartesian(
+    r: _ArrayOrScalar, theta: _ArrayOrScalar
+) -> tuple[_ArrayOrScalar, _ArrayOrScalar]:
     x = r * np.cos(theta)
     y = r * np.sin(theta)
     return x, y
