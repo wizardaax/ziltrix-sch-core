@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 import svgwrite
 from scipy.io.wavfile import write
@@ -5,19 +7,35 @@ from scipy.io.wavfile import write
 # === Constants ===
 phi = (1 + np.sqrt(5)) / 2
 alpha_inv = 137.035999
-zeta_zeros = [14.1347, 21.022, 25.0109, 30.4249, 32.9351, 37.5862, 40.9187, 43.3271, 48.0052, 49.7738]
+zeta_zeros = [
+    14.1347,
+    21.022,
+    25.0109,
+    30.4249,
+    32.9351,
+    37.5862,
+    40.9187,
+    43.3271,
+    48.0052,
+    49.7738,
+]
 sample_rate = 44100
 duration_per_n = 1.0  # seconds
 num_n = 100
 
+# Phase tolerance for zeta glow trigger proximity check
+ZETA_GLOW_TOLERANCE = 0.1
+
+
 # === Core C(n) Formula ===
-def compute_C(n):
+def compute_C(n: Any) -> Any:
     geom_sum = (phi ** (n + 1) - 1) / (alpha_inv * (phi - 1))
     theta = 2 * np.pi * n / alpha_inv
     return geom_sum * np.exp(1j * theta)
 
+
 # === Generate Sound Wave ===
-def generate_waveform(c_val, freq, duration=1.0):
+def generate_waveform(c_val: Any, freq: Any, duration: float = 1.0) -> Any:
     t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
     waveform = np.zeros((len(t), 6))
     norm = np.abs(c_val)
@@ -25,14 +43,15 @@ def generate_waveform(c_val, freq, duration=1.0):
     imag_amp = np.imag(c_val) / norm if norm != 0 else 0
     phase_shift = np.angle(c_val)
     for k in range(6):
-        f_k = freq * (phi ** k)
+        f_k = freq * (phi**k)
         wave_r = real_amp * np.sin(2 * np.pi * f_k * t + phase_shift)
-        wave_i = imag_amp * np.sin(2 * np.pi * f_k * t + phase_shift + np.pi/2)
+        wave_i = imag_amp * np.sin(2 * np.pi * f_k * t + phase_shift + np.pi / 2)
         waveform[:, k] = (wave_r + wave_i) / 2
     return waveform
 
+
 # === Generate Symphony ===
-def generate_codex_symphony(filename='codex_symphony.wav'):
+def generate_codex_symphony(filename: str = "codex_symphony.wav") -> None:
     wave_list = []
     C_vals = [compute_C(n) for n in range(num_n)]
     mags = np.abs(C_vals)
@@ -45,16 +64,17 @@ def generate_codex_symphony(filename='codex_symphony.wav'):
     write(filename, sample_rate, full_norm)
     print(f"[OK] Audio Exported: {filename}")
 
+
 # === Generate Glyph SVG ===
-def generate_reactive_glyph(n, c_val, amp, frame=0):
+def generate_reactive_glyph(n: int, c_val: Any, amp: float, frame: int = 0) -> None:
     mag = np.abs(c_val)
     phase = np.angle(c_val)
-    dwg = svgwrite.Drawing(f'glyph_n{n}_frame{frame}.svg', size=('400', '400'))
-    dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'), fill='black'))
+    dwg = svgwrite.Drawing(f"glyph_n{n}_frame{frame}.svg", size=("400", "400"))
+    dwg.add(dwg.rect(insert=(0, 0), size=("100%", "100%"), fill="black"))
 
     # Core flame ⊙
     scale = min(10 + mag / 1e10, 20)
-    dwg.add(dwg.circle(center=(200, 200), r=scale, fill='yellow', stroke='orange', stroke_width=2))
+    dwg.add(dwg.circle(center=(200, 200), r=scale, fill="yellow", stroke="orange", stroke_width=2))
 
     # Spiral arms
     points = []
@@ -63,27 +83,29 @@ def generate_reactive_glyph(n, c_val, amp, frame=0):
         x = 200 + r * np.cos(t)
         y = 200 + r * np.sin(t)
         points.append((x, y))
-    dwg.add(dwg.polyline(points, fill='none', stroke='white', stroke_width=1.5))
+    dwg.add(dwg.polyline(points, fill="none", stroke="white", stroke_width=1.5))
 
     # Zeta glow triggers
     for zero in zeta_zeros:
-        if abs((phase % (2 * np.pi)) - (zero % (2 * np.pi))) < 0.1:
+        if abs((phase % (2 * np.pi)) - (zero % (2 * np.pi))) < ZETA_GLOW_TOLERANCE:
             glow_r = 5 + 10 * np.sin(frame / 5)
             theta = zero * alpha_inv
             gx = 200 + 50 * np.cos(theta)
             gy = 200 + 50 * np.sin(theta)
-            dwg.add(dwg.circle(center=(gx, gy), r=glow_r, fill='red', opacity=0.7))
+            dwg.add(dwg.circle(center=(gx, gy), r=glow_r, fill="red", opacity=0.7))
 
     dwg.save()
     print(f"[OK] Glyph n={n} frame={frame} saved.")
 
+
 # === Generate Glyph Sequence ===
-def generate_all_glyphs():
+def generate_all_glyphs() -> None:
     for n in range(num_n):
         c_val = compute_C(n)
         amp = np.abs(c_val) / 1e10  # Scaled amplitude
         for frame in range(10):  # Animation frames
             generate_reactive_glyph(n, c_val, amp, frame)
+
 
 # === Execute Everything ===
 if __name__ == "__main__":
