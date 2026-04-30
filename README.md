@@ -5,8 +5,6 @@
 
 Ziltrix SCH (Sentinel Cognitive Hybridiser) is a core engine for symbolic-cognitive computation built around recursive field math: Lucas/Fibonacci sequences, golden-ratio (φ) structures, ternary logic/fields, entropy pumps, and glyph-based symbolic operators. The focus is on mathematically faithful primitives with high reliability and security.
 
-Where Intelligence Becomes Intelligent.
-
 ## Features
 - Recursive Lucas/Fibonacci operators and φ-aligned transforms
 - Ternary field structures and composable symbolic glyph pipelines
