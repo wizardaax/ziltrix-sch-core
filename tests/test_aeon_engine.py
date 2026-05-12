@@ -25,6 +25,9 @@ from aeon_engine import (
     PHASEII_DATA,
     PHI,
     PSI_RESONANCE,
+    aeon_brane_state,
+    aeon_gate_from_coherence_history,
+    aeon_gate_state,
     aeon_summary,
     aeon_thrust_series,
     base_brane_layers,
@@ -130,14 +133,82 @@ def test_dynamic_gate_both_conditions_required() -> None:
 
 
 def test_aeon_summary_complete() -> None:
-    """Public summary contains constants + series + validation."""
+    """Public summary contains constants + series + validation + v2.1 fields."""
     s = aeon_summary()
+    assert s["version"] == "v2.1"
     assert "constants" in s
     assert "thrust_series" in s
     assert "validation" in s
+    assert "brane_geometry" in s
+    assert "dynamic_gate" in s
     assert s["constants"]["phi"] == PHI
     assert len(s["thrust_series"]) == 5
     assert s["validation"]["matched"] is True
+
+
+def test_aeon_brane_state_v21_shape() -> None:
+    """v2.1 brane geometry snapshot exposes base + dynamic stacks and shift."""
+    b = aeon_brane_state()
+    assert b["base_layers"] == base_brane_layers()
+    assert len(b["dynamic_layers"]) == 3
+    # ψ_t=1.0 default → each dynamic layer = base + 0.1
+    for d, base in zip(b["dynamic_layers"], b["base_layers"]):
+        assert math.isclose(d, base + 0.1, rel_tol=1e-12)
+    # Snell angle through identical-φ first-pair is identity → small for π/4 input
+    assert -math.pi / 2 <= b["snell_angle_base_rad"] <= math.pi / 2
+    assert -math.pi / 2 <= b["snell_angle_dynamic_rad"] <= math.pi / 2
+    # Shift between base and dynamic should be finite and small
+    assert abs(b["snell_shift_deg"]) < 90.0
+
+
+def test_aeon_gate_state_v21_thresholds() -> None:
+    """v2.1 dynamic-gate snapshot reports both activation conditions."""
+    g = aeon_gate_state()  # defaults: tau=0.01, dpsi_dt=0.199, sigma=1.0
+    assert g["tau_threshold"] == 0.007
+    assert g["tau_above"] is True  # 0.01 > 0.007
+    assert math.isclose(g["dpsi_dt_threshold"], 1.5, rel_tol=1e-12)
+    assert g["dpsi_dt_above"] is False  # 0.199 < 1.5
+    assert g["gated_active"] is False  # only one condition met
+    # When both pass → gate active
+    g2 = aeon_gate_state(tau=0.01, dpsi_dt=2.0, sigma_dpsi_dt=1.0)
+    assert g2["gated_active"] is True
+
+
+def test_aeon_gate_from_history_insufficient() -> None:
+    """Live gate falls back to documented defaults when history < 3."""
+    g = aeon_gate_from_coherence_history([0.5, 0.6])
+    assert g["source"] == "insufficient_history"
+    assert g["history_n"] == 2
+    # Falls back to documented defaults
+    assert g["tau"] == 0.01
+
+
+def test_aeon_gate_from_history_constant_series() -> None:
+    """Constant coherence → τ=0, σ tiny, gate τ-condition fails."""
+    series = [0.7] * 10  # 10 cycles, all 0.7
+    g = aeon_gate_from_coherence_history(series, dt=1.0, window=5)
+    assert g["source"] == "live"
+    assert math.isclose(g["tau"], 0.0, abs_tol=1e-12)
+    assert g["tau_above"] is False  # 0.0 not > 0.007
+    # dψ/dt is also 0 → not above 1.5σ either
+    assert g["gated_active"] is False
+
+
+def test_aeon_gate_from_history_realistic() -> None:
+    """Realistic ramp produces meaningful τ and dψ/dt values."""
+    # Coherence climbing from 0.5 → 0.9 over 12 cycles (real-looking ramp)
+    series = [0.50, 0.52, 0.55, 0.58, 0.62, 0.66, 0.70, 0.74, 0.78, 0.82, 0.86, 0.90]
+    g = aeon_gate_from_coherence_history(series, dt=60.0, window=5)
+    assert g["source"] == "live"
+    assert g["history_n"] == 12
+    assert g["ma_window"] == 5
+    assert g["last_coherence"] == 0.90
+    assert g["prev_coherence"] == 0.86
+    # τ = |0.90 - 0.86| = 0.04 — well above 0.007
+    assert math.isclose(g["tau"], 0.04, rel_tol=1e-9)
+    assert g["tau_above"] is True
+    # Monotone increasing ramp → positive dψ/dt
+    assert g["dpsi_dt"] > 0
 
 
 def test_phaseii_reference_data_intact() -> None:

@@ -184,13 +184,152 @@ def validate_against_phaseii(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# AEON-M v2.1 — brane geometry + dynamic gate snapshot helpers.
+# These surface the v2.1 dynamic-lensing math into the cognitive cycle output
+# alongside the v2.0 thrust series. Both base and dynamic stacks are reported
+# so the cycle log can show how the brane refraction shifts under ψ modulation.
+# ─────────────────────────────────────────────────────────────────────────────
+def aeon_brane_state(
+    theta_in: float = math.pi / 4,
+    psi_t: float = 1.0,
+) -> dict[str, object]:
+    """v2.1 brane geometry snapshot.
+
+    theta_in defaults to π/4 (45°) — representative input through the
+    documented chevron aperture. psi_t defaults to 1.0 — unit modulation
+    per the v2.1 dynamic-lensing rule n_i(t) = n_base + 0.1·ψ(t).
+    """
+    base = base_brane_layers()
+    dyn = dynamic_layers(psi_t, base=base)
+    theta_base = snells_refraction(theta_in, base)
+    theta_dyn = snells_refraction(theta_in, dyn)
+    return {
+        "base_layers": base,
+        "dynamic_layers": dyn,
+        "dynamic_psi_t": psi_t,
+        "theta_in_rad": theta_in,
+        "theta_in_deg": math.degrees(theta_in),
+        "snell_angle_base_rad": theta_base,
+        "snell_angle_dynamic_rad": theta_dyn,
+        "snell_angle_base_deg": math.degrees(theta_base),
+        "snell_angle_dynamic_deg": math.degrees(theta_dyn),
+        "snell_shift_deg": math.degrees(theta_dyn - theta_base),
+    }
+
+
+def aeon_gate_state(
+    tau: float | None = None,
+    dpsi_dt: float | None = None,
+    sigma_dpsi_dt: float = 1.0,
+) -> dict[str, object]:
+    """v2.1 dynamic-gate snapshot — both activation conditions reported.
+
+    Defaults are derived from the documented PhaseII data:
+      tau ≈ 0.01 (just above the 0.007 threshold)
+      dpsi_dt ≈ |dΦ/dt|_step1 / ψ_resonance ≈ 28.7/144 ≈ 0.199
+    Callers with live cycle metrics should pass the real values.
+    """
+    if tau is None:
+        tau = 0.01
+    if dpsi_dt is None:
+        dpsi_dt = abs(PHASEII_DATA[0][2]) / PSI_RESONANCE
+    threshold_dpsi = 1.5 * sigma_dpsi_dt
+    return {
+        "tau": tau,
+        "tau_threshold": 0.007,
+        "tau_above": tau > 0.007,
+        "dpsi_dt": dpsi_dt,
+        "sigma_dpsi_dt": sigma_dpsi_dt,
+        "dpsi_dt_threshold": threshold_dpsi,
+        "dpsi_dt_above": abs(dpsi_dt) > threshold_dpsi,
+        "gated_active": dynamic_gate(tau, dpsi_dt, sigma_dpsi_dt),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Live gate from observed cycle metrics.
+# Maps cognitive-cycle coherence trajectory onto AEON-M v2.1 gate variables:
+#   τ        = |coherence_now − coherence_prev|         (delta-coherence)
+#   ψ(t_i)   = coherence_i                              (modulation variable)
+#   ma(t_i)  = mean of last `window` coherence values   (smoothed trajectory)
+#   dψ/dt    = (ma_now − ma_prev) / dt                  (slope of MA)
+#   σ_dψ/dt  = std of past dψ/dt values                 (noise floor)
+#
+# This makes the v2.1 dynamic gate observable from live cycle behaviour
+# without requiring AEON-specific telemetry — coherence is already tracked
+# by every cycle. Gate fires when the system is BOTH agitated (τ above
+# 0.007) AND moving against the noise floor (|slope| > 1.5σ).
+# ─────────────────────────────────────────────────────────────────────────────
+def aeon_gate_from_coherence_history(
+    coherence_series: list[float],
+    dt: float = 1.0,
+    window: int = 5,
+) -> dict[str, object]:
+    """Compute a live v2.1 dynamic-gate from cycle coherence history.
+
+    coherence_series: list of recent average-coherence values, oldest first.
+    dt: seconds between cycles (CYCLE_INTERVAL in the loop).
+    window: moving-average window in cycles.
+
+    Returns the aeon_gate_state dict with `source` set to one of:
+      'live'                    — full history available
+      'insufficient_history'    — < 3 cycles, returns documented defaults
+      'insufficient_ma_history' — < window+1 cycles, returns τ-only live
+    """
+    if len(coherence_series) < 3:
+        out = aeon_gate_state()
+        out["source"] = "insufficient_history"
+        out["history_n"] = len(coherence_series)
+        return out
+
+    tau = abs(coherence_series[-1] - coherence_series[-2])
+
+    n = len(coherence_series)
+    if n < window + 1:
+        out = aeon_gate_state(tau=tau)
+        out["source"] = "insufficient_ma_history"
+        out["history_n"] = n
+        return out
+
+    # Moving averages: ma_i = mean of coherence_series[i-window+1 : i+1]
+    mas: list[float] = []
+    for i in range(window - 1, n):
+        chunk = coherence_series[i - window + 1 : i + 1]
+        mas.append(sum(chunk) / len(chunk))
+
+    # Slopes between successive MA points
+    slopes = [(mas[i] - mas[i - 1]) / dt for i in range(1, len(mas))]
+    dpsi_dt = slopes[-1]
+
+    # σ from PRIOR slopes (everything except the most-recent), so the
+    # current slope is judged against past noise, not its own contribution.
+    if len(slopes) < 2:
+        sigma = 1.0
+    else:
+        prior = slopes[:-1]
+        mean = sum(prior) / len(prior)
+        var = sum((x - mean) ** 2 for x in prior) / len(prior)
+        sigma = math.sqrt(var) if var > 0 else 1e-6
+
+    out = aeon_gate_state(tau=tau, dpsi_dt=dpsi_dt, sigma_dpsi_dt=sigma)
+    out["source"] = "live"
+    out["history_n"] = n
+    out["ma_window"] = window
+    out["dt"] = dt
+    out["last_coherence"] = coherence_series[-1]
+    out["prev_coherence"] = coherence_series[-2]
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Public summary — for inclusion in the cognitive cycle's results.
 # ─────────────────────────────────────────────────────────────────────────────
 def aeon_summary() -> dict[str, object]:
-    """Headline AEON state — constants + a fresh thrust simulation."""
+    """Headline AEON state — constants + thrust simulation + v2.1 geometry."""
     samples = aeon_thrust_series()
     val = validate_against_phaseii(samples)
     return {
+        "version": "v2.1",
         "constants": {
             "phi": PHI,
             "golden_angle_deg": GOLDEN_ANGLE_DEG,
@@ -206,6 +345,8 @@ def aeon_summary() -> dict[str, object]:
             for s in samples
         ],
         "validation": val,
+        "brane_geometry": aeon_brane_state(),
+        "dynamic_gate": aeon_gate_state(),
     }
 
 
