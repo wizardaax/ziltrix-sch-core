@@ -32,7 +32,7 @@ GOLDEN_ANGLE_DEG: float = 360.0 / (PHI ** 2)       # 137.5077640500378
 PSI_RESONANCE: float = 144.0                       # ψ (resonance freq, AEON scale-field)
 ALPHA_INV: float = 137.036                         # α⁻¹ (fine-structure inverse)
 CHEVRON_ANGLE_RAD: float = math.pi / 3.0           # 60° aperture
-CHI: float = 2.0 * math.pi / CHEVRON_ANGLE_RAD     # ≈ 6.2832 modulation freq
+CHI: float = 2.0 * math.pi / CHEVRON_ANGLE_RAD     # = 6.0 exactly (chevron count in 360°)
 N3_MEDIUM: float = ALPHA_INV / PSI_RESONANCE       # ≈ 0.9516 medium index
 
 # ωₙ from the PhaseII simulation header — the operating angular frequency
