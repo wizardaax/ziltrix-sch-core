@@ -32,11 +32,20 @@
       },
       "topic": "gate_activation",
       "ts": 1778673548.4694247
+    },
+    {
+      "file": "findings/20260513T145908Z_constant-consistency_fccd793b.md",
+      "params": {
+        "name": "GOLDEN_ANGLE_DEG = 360 / φ²",
+        "variant": 0
+      },
+      "topic": "constant_consistency",
+      "ts": 1778684348.4879775
     }
   ],
   "param_cursor": {
     "brane_refraction": 1,
-    "constant_consistency": 0,
+    "constant_consistency": 1,
     "coupling_k_extraction": 0,
     "dynamic_layers": 1,
     "gate_activation": 1,
@@ -44,7 +53,7 @@
   },
   "topic_pulls": {
     "brane_refraction": 1,
-    "constant_consistency": 0,
+    "constant_consistency": 1,
     "coupling_k_extraction": 0,
     "dynamic_layers": 1,
     "gate_activation": 1,
@@ -52,12 +61,12 @@
   },
   "topic_q": {
     "brane_refraction": 1.0,
-    "constant_consistency": 0.0,
+    "constant_consistency": 1.0,
     "coupling_k_extraction": 0.0,
     "dynamic_layers": 1.0,
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 4,
+  "total_pulls": 5,
   "version": 1
 }
