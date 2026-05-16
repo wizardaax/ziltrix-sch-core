@@ -141,12 +141,20 @@
       },
       "topic": "constant_consistency",
       "ts": 1778943548.462925
+    },
+    {
+      "file": "findings/20260516T175908Z_coupling-k-extraction_5ddb9238.md",
+      "params": {
+        "sample_idx": 2
+      },
+      "topic": "coupling_k_extraction",
+      "ts": 1778954348.5634272
     }
   ],
   "param_cursor": {
     "brane_refraction": 3,
     "constant_consistency": 3,
-    "coupling_k_extraction": 2,
+    "coupling_k_extraction": 3,
     "dynamic_layers": 3,
     "gate_activation": 3,
     "thrust_validation": 3
@@ -154,7 +162,7 @@
   "topic_pulls": {
     "brane_refraction": 3,
     "constant_consistency": 3,
-    "coupling_k_extraction": 2,
+    "coupling_k_extraction": 3,
     "dynamic_layers": 3,
     "gate_activation": 3,
     "thrust_validation": 3
@@ -167,6 +175,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 17,
+  "total_pulls": 18,
   "version": 1
 }
