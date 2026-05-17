@@ -215,13 +215,21 @@
       },
       "topic": "brane_refraction",
       "ts": 1779040748.731892
+    },
+    {
+      "file": "findings/20260517T205908Z_dynamic-layers_3abe148c.md",
+      "params": {
+        "psi_t": -0.5
+      },
+      "topic": "dynamic_layers",
+      "ts": 1779051548.5816267
     }
   ],
   "param_cursor": {
     "brane_refraction": 0,
     "constant_consistency": 0,
     "coupling_k_extraction": 4,
-    "dynamic_layers": 4,
+    "dynamic_layers": 0,
     "gate_activation": 0,
     "thrust_validation": 0
   },
@@ -229,7 +237,7 @@
     "brane_refraction": 5,
     "constant_consistency": 4,
     "coupling_k_extraction": 4,
-    "dynamic_layers": 4,
+    "dynamic_layers": 5,
     "gate_activation": 4,
     "thrust_validation": 5
   },
@@ -241,6 +249,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 26,
+  "total_pulls": 27,
   "version": 1
 }
