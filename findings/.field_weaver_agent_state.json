@@ -182,11 +182,20 @@
       },
       "topic": "gate_activation",
       "ts": 1778997548.7748117
+    },
+    {
+      "file": "findings/20260517T085908Z_constant-consistency_2b27ad6a.md",
+      "params": {
+        "name": "χ = 2π / (π/3)",
+        "variant": 3
+      },
+      "topic": "constant_consistency",
+      "ts": 1779008348.5296571
     }
   ],
   "param_cursor": {
     "brane_refraction": 4,
-    "constant_consistency": 3,
+    "constant_consistency": 0,
     "coupling_k_extraction": 3,
     "dynamic_layers": 4,
     "gate_activation": 0,
@@ -194,7 +203,7 @@
   },
   "topic_pulls": {
     "brane_refraction": 4,
-    "constant_consistency": 3,
+    "constant_consistency": 4,
     "coupling_k_extraction": 3,
     "dynamic_layers": 4,
     "gate_activation": 4,
@@ -208,6 +217,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 22,
+  "total_pulls": 23,
   "version": 1
 }
