@@ -249,6 +249,14 @@
       },
       "topic": "coupling_k_extraction",
       "ts": 1779094748.8043003
+    },
+    {
+      "file": "findings/20260518T125908Z_thrust-validation_8b22c7ff.md",
+      "params": {
+        "n_steps": 5
+      },
+      "topic": "thrust_validation",
+      "ts": 1779109148.8641517
     }
   ],
   "param_cursor": {
@@ -257,7 +265,7 @@
     "coupling_k_extraction": 0,
     "dynamic_layers": 0,
     "gate_activation": 1,
-    "thrust_validation": 0
+    "thrust_validation": 1
   },
   "topic_pulls": {
     "brane_refraction": 5,
@@ -265,7 +273,7 @@
     "coupling_k_extraction": 5,
     "dynamic_layers": 5,
     "gate_activation": 5,
-    "thrust_validation": 5
+    "thrust_validation": 6
   },
   "topic_q": {
     "brane_refraction": 1.0,
@@ -275,6 +283,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 30,
+  "total_pulls": 31,
   "version": 1
 }
