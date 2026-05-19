@@ -307,10 +307,18 @@
       },
       "topic": "thrust_validation",
       "ts": 1779195549.3792534
+    },
+    {
+      "file": "findings/20260519T165909Z_brane-refraction_8da6fea1.md",
+      "params": {
+        "theta_in_deg": 30.0
+      },
+      "topic": "brane_refraction",
+      "ts": 1779209949.518214
     }
   ],
   "param_cursor": {
-    "brane_refraction": 1,
+    "brane_refraction": 2,
     "constant_consistency": 2,
     "coupling_k_extraction": 1,
     "dynamic_layers": 1,
@@ -318,7 +326,7 @@
     "thrust_validation": 2
   },
   "topic_pulls": {
-    "brane_refraction": 6,
+    "brane_refraction": 7,
     "constant_consistency": 6,
     "coupling_k_extraction": 6,
     "dynamic_layers": 6,
@@ -333,6 +341,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 37,
+  "total_pulls": 38,
   "version": 1
 }
