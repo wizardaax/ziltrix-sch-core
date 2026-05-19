@@ -282,11 +282,20 @@
       },
       "topic": "gate_activation",
       "ts": 1779152348.945988
+    },
+    {
+      "file": "findings/20260519T045908Z_constant-consistency_49a7b5eb.md",
+      "params": {
+        "name": "N3_MEDIUM = α⁻¹ / ψ_resonance",
+        "variant": 1
+      },
+      "topic": "constant_consistency",
+      "ts": 1779166748.8891766
     }
   ],
   "param_cursor": {
     "brane_refraction": 1,
-    "constant_consistency": 1,
+    "constant_consistency": 2,
     "coupling_k_extraction": 0,
     "dynamic_layers": 1,
     "gate_activation": 2,
@@ -294,7 +303,7 @@
   },
   "topic_pulls": {
     "brane_refraction": 6,
-    "constant_consistency": 5,
+    "constant_consistency": 6,
     "coupling_k_extraction": 5,
     "dynamic_layers": 6,
     "gate_activation": 6,
@@ -308,6 +317,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 34,
+  "total_pulls": 35,
   "version": 1
 }
