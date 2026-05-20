@@ -332,11 +332,20 @@
       },
       "topic": "gate_activation",
       "ts": 1779238748.2227683
+    },
+    {
+      "file": "findings/20260520T045908Z_constant-consistency_f075e60c.md",
+      "params": {
+        "name": "DRIVE_FREQ_HZ = ω_n / (2π)",
+        "variant": 2
+      },
+      "topic": "constant_consistency",
+      "ts": 1779253148.2046268
     }
   ],
   "param_cursor": {
     "brane_refraction": 2,
-    "constant_consistency": 2,
+    "constant_consistency": 3,
     "coupling_k_extraction": 1,
     "dynamic_layers": 2,
     "gate_activation": 3,
@@ -344,7 +353,7 @@
   },
   "topic_pulls": {
     "brane_refraction": 7,
-    "constant_consistency": 6,
+    "constant_consistency": 7,
     "coupling_k_extraction": 6,
     "dynamic_layers": 7,
     "gate_activation": 7,
@@ -358,6 +367,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 40,
+  "total_pulls": 41,
   "version": 1
 }
