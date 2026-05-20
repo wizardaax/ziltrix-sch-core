@@ -323,6 +323,15 @@
       },
       "topic": "dynamic_layers",
       "ts": 1779224349.1750007
+    },
+    {
+      "file": "findings/20260520T005908Z_gate-activation_2df79afc.md",
+      "params": {
+        "case": "τ above, dψ below",
+        "case_id": 2
+      },
+      "topic": "gate_activation",
+      "ts": 1779238748.2227683
     }
   ],
   "param_cursor": {
@@ -330,7 +339,7 @@
     "constant_consistency": 2,
     "coupling_k_extraction": 1,
     "dynamic_layers": 2,
-    "gate_activation": 2,
+    "gate_activation": 3,
     "thrust_validation": 2
   },
   "topic_pulls": {
@@ -338,7 +347,7 @@
     "constant_consistency": 6,
     "coupling_k_extraction": 6,
     "dynamic_layers": 7,
-    "gate_activation": 6,
+    "gate_activation": 7,
     "thrust_validation": 7
   },
   "topic_q": {
@@ -349,6 +358,6 @@
     "gate_activation": 1.0,
     "thrust_validation": 1.0
   },
-  "total_pulls": 39,
+  "total_pulls": 40,
   "version": 1
 }
