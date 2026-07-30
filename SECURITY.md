@@ -1,6 +1,6 @@
 # Security Policy
 
-- Report vulnerabilities via GitHub Security Advisory or email: security@ziltrix.ai (replace with your contact).
+- Report vulnerabilities via GitHub Security Advisory or email: adzextreem@gmail.com.
 - Please do not open public issues for security reports.
 - We aim to acknowledge within 72 hours and provide a fix ETA within 7 days for high severity issues.
 
